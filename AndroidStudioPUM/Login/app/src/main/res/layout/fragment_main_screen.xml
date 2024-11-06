@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B388FF"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/abril_fatface"
+            android:text="Witaj"
+            android:textAlignment="center"
+            android:textColor="#6750A3"
+            android:textSize="48sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/logButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Zaloguj się" />
+
+            <Button
+                android:id="@+id/regButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Zarejestruj się" />
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
