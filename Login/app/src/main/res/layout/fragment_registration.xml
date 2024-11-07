@@ -31,25 +31,29 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userIn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nazwa użytkownika" />
+                android:layout_height="50dp"
+                android:hint="Nazwa użytkownika"
+                android:maxLength="8" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/pass1in"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:ems="10"
                 android:hint="Hasło"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="16" />
 
             <EditText
-                android:id="@+id/editTextTextPassword3"
+                android:id="@+id/pass2in"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:ems="10"
                 android:hint="Powtórz hasło"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLength="16" />
 
             <Button
                 android:id="@+id/regButton"

@@ -12,7 +12,7 @@ data class User (
     val password: String
 )
 
-val users = arrayOf(
+val users = mutableListOf(
     User("Anna","Haslo123"),
     User("Jan","Admin2000"),
     User("Wojciech","Wojti1988"),

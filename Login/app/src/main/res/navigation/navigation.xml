@@ -11,11 +11,11 @@
         android:label="fragment_main_screen"
         tools:layout="@layout/fragment_main_screen" >
         <action
-            android:id="@+id/action_mainScreen_to_login"
-            app:destination="@id/login" />
+            android:id="@+id/to_login"
+            app:destination="@id/login"/>
         <action
-            android:id="@+id/action_mainScreen_to_registration"
-            app:destination="@id/registration" />
+            android:id="@+id/to_registration"
+            app:destination="@id/registration"/>
     </fragment>
     <fragment
         android:id="@+id/login"
@@ -23,10 +23,10 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_login_to_welcomeScreen"
+            android:id="@+id/to_welcomeScreen"
             app:destination="@id/welcomeScreen" />
         <action
-            android:id="@+id/action_login_to_registration"
+            android:id="@+id/to_registration"
             app:destination="@id/registration" />
     </fragment>
     <fragment
@@ -35,7 +35,7 @@
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" >
         <action
-            android:id="@+id/action_registration_to_login"
+            android:id="@+id/to_login"
             app:destination="@id/login" />
     </fragment>
     <fragment
@@ -44,7 +44,7 @@
         android:label="fragment_welcome_screen"
         tools:layout="@layout/fragment_welcome_screen" >
         <action
-            android:id="@+id/action_welcomeScreen_to_mainScreen"
+            android:id="@+id/to_mainScreen"
             app:destination="@id/mainScreen" />
     </fragment>
 </navigation>

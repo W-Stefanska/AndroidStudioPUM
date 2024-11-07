@@ -24,11 +24,12 @@ class MainScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.logButton.setOnClickListener {
-            val action = 
-            //Navigation.findNavController(requireView()).navigate(action)
+            val action = MainScreenDirections.toLogin()
+            Navigation.findNavController(requireView()).navigate(action)
         }
-        binding.logButton.setOnClickListener {
-
+        binding.regButton.setOnClickListener {
+            val action = MainScreenDirections.toRegistration()
+            Navigation.findNavController(requireView()).navigate(action)
         }
     }
 }

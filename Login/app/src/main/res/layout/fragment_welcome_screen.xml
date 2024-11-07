@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:fontFamily="@font/abril_fatface"
-            android:text="Witaj <name>"
+            android:text="Witaj *name*"
             android:textAlignment="center"
             android:textColor="#6750A3"
             android:textSize="48sp" />
@@ -31,7 +31,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/loutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Wyloguj" />
