@@ -31,14 +31,14 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/userIn"
+                android:id="@+id/logUser"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="Nazwa użytkownika"
                 android:maxLength="8" />
 
             <EditText
-                android:id="@+id/pass1in"
+                android:id="@+id/logPass"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"

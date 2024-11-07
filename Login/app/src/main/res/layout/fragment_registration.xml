@@ -34,6 +34,7 @@
                 android:id="@+id/userIn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:ems="10"
                 android:hint="Nazwa użytkownika"
                 android:maxLength="8" />
 

@@ -24,13 +24,14 @@ class Login : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val uin = binding.userIn.text.toString()
-        val pin = binding.pass1in.text.toString()
+
         binding.logButton.setOnClickListener {
+            val uin = binding.logUser.text.toString()
+            val pin = binding.logPass.text.toString()
             for (i in users) {
                 if (uin == i.name) {
                     if (pin == i.password) {
-                        val action = LoginDirections.toWelcomeScreen()
+                        val action = LoginDirections.toWelcomeScreen(uin)
                         Navigation.findNavController(requireView()).navigate(action)
                     }
                     else {

@@ -24,7 +24,8 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/to_welcomeScreen"
-            app:destination="@id/welcomeScreen" />
+            app:destination="@id/welcomeScreen" >
+        </action>
         <action
             android:id="@+id/to_registration"
             app:destination="@id/registration" />
@@ -46,5 +47,8 @@
         <action
             android:id="@+id/to_mainScreen"
             app:destination="@id/mainScreen" />
+        <argument
+            android:name="username0"
+            app:argType="string" />
     </fragment>
 </navigation>
