@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/e1"
+        android:icon="@drawable/lista"
+        android:title="Listy Zadań" />
+    <item
+        android:id="@id/e2"
+        android:icon="@drawable/ocena"
+        android:title="Oceny" />
+</menu>
