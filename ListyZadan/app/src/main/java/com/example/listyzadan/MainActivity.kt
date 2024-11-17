@@ -1,6 +1,7 @@
 package com.example.listyzadan
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,6 +23,12 @@ data class Subject (
     val name: String,
 )
 
+data class Summary (
+    val subject: Subject,
+    val average: Double,
+    val appearances: Int
+)
+
 data class ExerciseList (
     val exercises: MutableList<Exercise>,
     val subject: Subject,
@@ -29,6 +36,7 @@ data class ExerciseList (
 )
 
 val listyZadan = mutableListOf<ExerciseList>()
+val rosemary = mutableListOf<Summary>()
 
 val Subjects = mutableListOf(
     Subject("Matematyka"),
@@ -73,5 +81,19 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
+
+        for (i in 0..4) {
+            var sum = 0.0
+            var counter = 0
+            for (j in 0..19) {
+                if (listyZadan[j].subject.name == Subjects[i].name) {
+                    sum += listyZadan[j].grade
+                    counter++
+                }
+            }
+            val average = if (counter > 0) sum / counter else 0.0
+            rosemary.add(Summary(Subjects[i], average, counter))
+        }
+        rosemary.removeAll { it.appearances == 0 }
     }
 }

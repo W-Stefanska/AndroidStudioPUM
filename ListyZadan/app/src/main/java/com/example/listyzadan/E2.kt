@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.listyzadan.databinding.FragmentE2Binding
 
 
@@ -26,6 +25,6 @@ class E2 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView2.adapter = OcenyAdapter(listyZadan)
+        binding.recyclerView2.adapter = OcenyAdapter(rosemary)
     }
 }
