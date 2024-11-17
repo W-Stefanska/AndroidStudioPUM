@@ -11,9 +11,6 @@ import com.example.listyzadan.databinding.FragmentE1Binding
 
 class E1 : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     private lateinit var binding: FragmentE1Binding
 
     override fun onCreateView(
