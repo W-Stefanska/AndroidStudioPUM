@@ -12,12 +12,12 @@
         tools:layout="@layout/fragment_e1" />
     <fragment
         android:id="@+id/e2"
-        android:name="com.example.listyzadan.e2"
+        android:name="com.example.listyzadan.E2"
         android:label="fragment_e2"
         tools:layout="@layout/fragment_e2" />
     <fragment
         android:id="@+id/e3"
-        android:name="com.example.listyzadan.e3"
+        android:name="com.example.listyzadan.E3"
         android:label="fragment_e3"
         tools:layout="@layout/fragment_e3" />
 </navigation>

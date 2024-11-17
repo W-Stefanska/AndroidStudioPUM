@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-private val listyZadan by lazy { MutableList(50) {"Zadanie $it"} }
-
 class E1 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,7 +10,13 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Listy Zadań" />
+        android:background="#B9F6CA"
+        android:fontFamily="sans-serif-condensed-light"
+        android:paddingTop="10dp"
+        android:text="Moje Listy Zadań"
+        android:textAlignment="center"
+        android:textColor="#499E60"
+        android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
