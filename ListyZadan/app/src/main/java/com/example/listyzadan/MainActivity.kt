@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 ExerciseList(
                     exercises = thyme,
                     subject = Subjects[Random.nextInt(0, Subjects.size)],
-                    grade = (Random.nextInt(6, 10)).toFloat()/2
+                    grade = (Random.nextInt(6, 11)).toFloat()/2
                 )
             )
         }
