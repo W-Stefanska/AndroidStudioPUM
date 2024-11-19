@@ -46,6 +46,41 @@ val Subjects = mutableListOf(
     Subject("Algorytmy")
 )
 
+fun generatorZadan() {
+    for (i in 1..20) {
+        val thyme = MutableList(Random.nextInt(1, 10)) {
+            Exercise(
+                content = "Lorem Ipsum",
+                points = Random.nextInt(1, 10)
+            )
+        }
+        listyZadan.add(
+            ExerciseList(
+                exercises = thyme,
+                subject = Subjects[Random.nextInt(0, Subjects.size)],
+                grade = (Random.nextInt(6, 11)).toFloat()/2
+            )
+        )
+    }
+}
+
+fun podsumujListy(): MutableList<Summary> {
+    for (i in 0..4) {
+        var sum = 0.0
+        var counter = 0
+        for (j in 0..19) {
+            if (listyZadan[j].subject.name == Subjects[i].name) {
+                sum += listyZadan[j].grade
+                counter++
+            }
+        }
+        val average = if (counter > 0) sum / counter else 0.0
+        rosemary.add(Summary(Subjects[i], average, counter))
+    }
+    rosemary.removeAll { it.appearances == 0 }
+    return rosemary
+}
+
 class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
@@ -66,34 +101,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bottomNavView.setupWithNavController(navController)
-        for (i in 1..20) {
-            val thyme = MutableList(Random.nextInt(1, 10)) {
-                Exercise(
-                    content = "Lorem Ipsum",
-                    points = Random.nextInt(1, 10)
-                )
-            }
-            listyZadan.add(
-                ExerciseList(
-                    exercises = thyme,
-                    subject = Subjects[Random.nextInt(0, Subjects.size)],
-                    grade = (Random.nextInt(6, 11)).toFloat()/2
-                )
-            )
-        }
 
-        for (i in 0..4) {
-            var sum = 0.0
-            var counter = 0
-            for (j in 0..19) {
-                if (listyZadan[j].subject.name == Subjects[i].name) {
-                    sum += listyZadan[j].grade
-                    counter++
-                }
-            }
-            val average = if (counter > 0) sum / counter else 0.0
-            rosemary.add(Summary(Subjects[i], average, counter))
-        }
-        rosemary.removeAll { it.appearances == 0 }
+        generatorZadan()
+        podsumujListy()
+
+        val test = rosemary.find {it.subject == Subjects[1]}?.appearances
+        Log.d("TEST", test.toString())
     }
 }

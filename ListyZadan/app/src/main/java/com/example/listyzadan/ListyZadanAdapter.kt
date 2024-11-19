@@ -19,7 +19,19 @@ class ListyZadanAdapter(private val listyZadan: MutableList<ExerciseList>):
 
     override fun onBindViewHolder(holder: ListyZadanViewHolder, position: Int) {
         val currentItem = listyZadan[position]
-        holder.bind(currentItem.subject.name, currentItem.exercises.size , position+1 , currentItem.grade)
+        var count = 0
+
+        fun calc() {
+            for (i in 0..(listyZadan.size-1)) {
+                if (currentItem.subject == listyZadan[i].subject) {
+                    count++
+                    if (i == position) {break}
+                }
+            }
+        }
+
+        calc()
+        holder.bind(currentItem.subject.name, currentItem.exercises.size , count, currentItem.grade)
     }
 
     class ListyZadanViewHolder(private val binding: ListyZadanBinding) :
