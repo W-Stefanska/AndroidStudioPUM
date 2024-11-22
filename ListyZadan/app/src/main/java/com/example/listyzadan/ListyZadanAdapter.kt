@@ -1,19 +1,23 @@
 package com.example.listyzadan
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listyzadan.databinding.ListyZadanBinding
 
 class ListyZadanAdapter(private val listyZadan: MutableList<ExerciseList>,
-    private val onItemClick: (ExerciseList) -> Unit
+    private val onItemClick: (ExerciseList, Int) -> Unit
 ): RecyclerView.Adapter<ListyZadanAdapter.ListyZadanViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListyZadanViewHolder {
         return ListyZadanViewHolder(
             ListyZadanBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
-        ) {onItemClick(listyZadan[it])}
+        ) {index ->
+            val clickedItem = listyZadan[index]
+            Log.d("TEST", "Clicked item: $clickedItem")
+            onItemClick(clickedItem, index)}
     }
 
     override fun getItemCount() = listyZadan.size

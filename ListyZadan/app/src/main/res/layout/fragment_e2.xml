@@ -15,7 +15,7 @@
         android:paddingVertical="10dp"
         android:text="Moje Oceny"
         android:textAlignment="center"
-        android:textColor="#499E60"
+        android:textColor="#234D2F"
         android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -14,6 +14,7 @@ class E1 : Fragment() {
 
     private lateinit var binding: FragmentE1Binding
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,10 +25,9 @@ class E1 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.recyclerView.apply {
-            adapter = ListyZadanAdapter(listyZadan) {
-                val action = E1Directions.actionE1ToE3()
+            adapter = ListyZadanAdapter(listyZadan) { listyZadan, clicked ->
+                val action = E1Directions.actionE1ToE3(clicked)
                 Navigation.findNavController(requireView()).navigate(action)
             }
             layoutManager = LinearLayoutManager(requireContext())

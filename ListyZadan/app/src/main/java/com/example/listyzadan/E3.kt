@@ -1,5 +1,6 @@
 package com.example.listyzadan
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,7 +25,14 @@ class E3 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val magic : Int = arguments?.getInt("magic")!!
+
         binding.recyclerView3.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView3.adapter = WidokListyAdapter(listyZadan, 1)
+        binding.recyclerView3.adapter = WidokListyAdapter(listyZadan, magic) {
+            a, b ->
+            var name = a.name
+            binding.titleCard.text = "$name\nLista $b"
+        }
+
     }
 }

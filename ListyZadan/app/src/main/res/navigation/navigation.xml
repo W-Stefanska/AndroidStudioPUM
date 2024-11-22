@@ -23,5 +23,9 @@
         android:id="@+id/e3"
         android:name="com.example.listyzadan.E3"
         android:label="fragment_e3"
-        tools:layout="@layout/fragment_e3" />
+        tools:layout="@layout/fragment_e3" >
+            <argument
+            android:name="magic"
+            app:argType="integer" />
+        </fragment>
 </navigation>

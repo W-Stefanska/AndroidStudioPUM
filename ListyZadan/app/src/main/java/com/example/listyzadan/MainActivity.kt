@@ -36,6 +36,7 @@ data class ExerciseList (
     val grade: Float,
 )
 
+
 val listyZadan = mutableListOf<ExerciseList>()
 val rosemary = mutableListOf<Summary>()
 
