@@ -9,7 +9,11 @@
         android:id="@+id/e1"
         android:name="com.example.listyzadan.E1"
         android:label="fragment_e1"
-        tools:layout="@layout/fragment_e1" />
+        tools:layout="@layout/fragment_e1" >
+        <action
+            android:id="@+id/action_e1_to_e3"
+            app:destination="@id/e3" />
+    </fragment>
     <fragment
         android:id="@+id/e2"
         android:name="com.example.listyzadan.E2"

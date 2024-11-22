@@ -1,5 +1,6 @@
 package com.example.listyzadan
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -104,8 +105,5 @@ class MainActivity : AppCompatActivity() {
 
         generatorZadan()
         podsumujListy()
-
-        val test = rosemary.find {it.subject == Subjects[1]}?.appearances
-        Log.d("TEST", test.toString())
     }
 }
