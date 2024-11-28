@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.listyzadan.databinding.ListyZadanBinding
 
 class ListyZadanAdapter(private val listyZadan: MutableList<ExerciseList>,
-    private val onItemClick: (ExerciseList, Int) -> Unit
+    private val onItemClick: (Int) -> Unit
 ): RecyclerView.Adapter<ListyZadanAdapter.ListyZadanViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListyZadanViewHolder {
         return ListyZadanViewHolder(
@@ -15,9 +15,7 @@ class ListyZadanAdapter(private val listyZadan: MutableList<ExerciseList>,
                 LayoutInflater.from(parent.context), parent, false
             )
         ) {index ->
-            val clickedItem = listyZadan[index]
-            Log.d("TEST", "Clicked item: $clickedItem")
-            onItemClick(clickedItem, index)}
+            onItemClick(index)}
     }
 
     override fun getItemCount() = listyZadan.size

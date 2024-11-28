@@ -26,7 +26,7 @@ class E1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.apply {
-            adapter = ListyZadanAdapter(listyZadan) { listyZadan, clicked ->
+            adapter = ListyZadanAdapter(listyZadan) { clicked ->
                 val action = E1Directions.actionE1ToE3(clicked)
                 Navigation.findNavController(requireView()).navigate(action)
             }
