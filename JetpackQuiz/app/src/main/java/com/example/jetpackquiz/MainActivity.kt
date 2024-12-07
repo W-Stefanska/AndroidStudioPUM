@@ -22,10 +22,10 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -146,8 +146,8 @@ val questions = listOf(
 )
 
 private var numQuestion = 0
-var randQuest = questions.shuffled()
-var randAnswer = randQuest[numQuestion].answers.shuffled()
+// var randQuest = questions.shuffled()
+// var randAnswer = randQuest[numQuestion].answers.shuffled()
 
 class MainActivity : ComponentActivity() {
     private var score = 0
@@ -170,10 +170,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetpackQuizTheme {
-                val numQuestion = remember { mutableIntStateOf(0) }
-                val score = remember { mutableIntStateOf(0) }
-                val randQuest = remember { questions.shuffled() }
-                val randAnswer = remember { mutableStateOf(randQuest[0].answers.shuffled()) }
+                val numQuestion = rememberSaveable { mutableIntStateOf(0) }
+                val score = rememberSaveable { mutableIntStateOf(0) }
+                val randQuest = rememberSaveable { questions.shuffled() }
+                val randAnswer = rememberSaveable { mutableStateOf(randQuest[0].answers.shuffled()) }
 
                 Quiz(
                     nr = numQuestion.intValue + 1,
@@ -193,7 +193,9 @@ class MainActivity : ComponentActivity() {
                             randAnswer.value = randQuest[numQuestion.intValue].answers.shuffled()
                         }
                     },
-                    score = score.intValue
+                    score = score.intValue,
+                    reset = { score.intValue = 0 },
+
                 )
             }
         }
@@ -209,11 +211,12 @@ fun Quiz(
      randQuest: List<Question>,
      numQuestion: Int,
      increment: (Boolean) -> Unit,
-     score: Int
+     score: Int,
+     reset: () -> Unit
 ) {
     val proBar = remember { mutableFloatStateOf(0.0f) }
-    val selA = remember { mutableIntStateOf(sA) }
-    val showDialog = remember { mutableStateOf(false) }
+    val selA = rememberSaveable { mutableIntStateOf(sA) }
+    val showDialog = rememberSaveable { mutableStateOf(false) }
     proBar.floatValue = (nr.toFloat() / questions.size.toFloat())
 
     Column(
@@ -261,6 +264,7 @@ fun Quiz(
         )
         Button(
             onClick = {
+                if (numQuestion == 0) { reset() }
                 if (selA.intValue != -1) {
                     val correct = randAnswer[selA.intValue].answerId == 1
                     increment(correct)
