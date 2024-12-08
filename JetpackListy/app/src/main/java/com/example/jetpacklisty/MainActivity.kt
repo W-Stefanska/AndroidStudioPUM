@@ -7,14 +7,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -27,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -136,29 +132,32 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetpackListyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    Navigation()
-                }
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    content = { innerPadding ->
+                        Navigation(modifier = Modifier.padding(innerPadding))
+                    }
+                )
             }
         }
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Navigation() {
+fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomMenu(navController = navController)},
-        content = { NavGraph(navController = navController) }
+        content = { NavGraph(navController = navController, modifier = modifier) }
     )
 }
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, modifier: Modifier) {
     NavHost(
         navController = navController,
         startDestination = Screens.E1.route,
+        modifier = modifier
     ) {
         composable(route = Screens.E1.route) { E1() }
         composable(route = Screens.E2.route) { E2() }
@@ -203,31 +202,42 @@ fun E1() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(20.dp).fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text("Moje Listy Zadań", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp, textAlign = TextAlign.Center)
         LazyColumn(
             modifier = Modifier.padding(bottom = 100.dp)
         ) {
             items(listyZadan.size) {
-                Box(
+                Column (
                     modifier = Modifier.fillMaxWidth().padding(5.dp)
                         .background(color = Color.LightGray)
                         .padding(30.dp),
                 ) {
+                    var count = 0
+
+                    fun calc() {
+                        for (i in 0..(listyZadan.size-1)) {
+                            if (listyZadan[it].subject == listyZadan[i].subject) {
+                                count++
+                                if (i == it) {break}
+                            }
+                        }
+                    }
+                    calc()
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(listyZadan[it].subject.name)
-                        Text(listyZadan[it].grade.toString())
+                        Text(listyZadan[it].subject.name, fontSize = 20.sp)
+                        Text("Lista: " + count, fontSize = 20.sp)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("a")
-                        Text("b")
+                        Text("Ilość zadań: " + listyZadan[it].exercises.size.toString())
+                        Text("Ocena: " + listyZadan[it].grade.toString())
                     }
                 }
             }
@@ -237,7 +247,38 @@ fun E1() {
 
 @Composable
 fun E2() {
-    Text(text = "E2")
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(20.dp).fillMaxWidth()
+    ) {
+        Text("Moje Oceny", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp, textAlign = TextAlign.Center)
+        LazyColumn(
+            modifier = Modifier.padding(bottom = 100.dp)
+        ) {
+            items(rosemary.size) {
+                Column (
+                    modifier = Modifier.fillMaxWidth().padding(5.dp)
+                        .background(color = Color.LightGray)
+                        .padding(30.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(rosemary[it].subject.name, fontSize = 20.sp)
+                        Text("Ocena: " + String.format("%.2f", rosemary[it].average).toDouble(), fontSize = 20.sp)
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Liczba list: " + rosemary[it].appearances)
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
