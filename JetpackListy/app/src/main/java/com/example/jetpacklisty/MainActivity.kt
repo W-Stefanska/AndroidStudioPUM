@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -116,8 +121,8 @@ sealed class BottomBar(
     val title: String,
     val icon: Int,
 ) {
-    data object E1 : BottomBar(Screens.E1.route, "E1", R.drawable.lista)
-    data object E2 : BottomBar(Screens.E2.route, "E2", R.drawable.ocena)
+    data object E1 : BottomBar(Screens.E1.route, "Listy zadań", R.drawable.lista)
+    data object E2 : BottomBar(Screens.E2.route, "Oceny", R.drawable.ocena)
 }
 
 class MainActivity : ComponentActivity() {
@@ -198,15 +203,33 @@ fun E1() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier.padding(20.dp).fillMaxWidth()
     ) {
-        Text("Moje Listy Zadan", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp)
-        LazyColumn {
+        Text("Moje Listy Zadań", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp, textAlign = TextAlign.Center)
+        LazyColumn(
+            modifier = Modifier.padding(bottom = 100.dp)
+        ) {
             items(listyZadan.size) {
-                Text(listyZadan[it].subject.name, modifier = Modifier.padding(0.dp))
-                Text(listyZadan[it].grade.toString())
-                Text("")
-                Text("")
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(5.dp)
+                        .background(color = Color.LightGray)
+                        .padding(30.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(listyZadan[it].subject.name)
+                        Text(listyZadan[it].grade.toString())
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("a")
+                        Text("b")
+                    }
+                }
             }
         }
     }
