@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,11 +33,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.jetpacklisty.ui.theme.JetpackListyTheme
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navArgument
 import kotlin.random.Random
 
 data class Exercise (
@@ -143,6 +146,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -159,9 +163,20 @@ fun NavGraph(navController: NavHostController, modifier: Modifier) {
         startDestination = Screens.E1.route,
         modifier = modifier
     ) {
-        composable(route = Screens.E1.route) { E1() }
+        composable(route = Screens.E1.route) { E1(navController) }
         composable(route = Screens.E2.route) { E2() }
-        composable(route = Screens.E3.route) { E3() }
+        composable(
+                route = "${Screens.E3.route}/{index}",
+                arguments = listOf(navArgument("index") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val index = backStackEntry.arguments!!.getInt("index")
+            val exerciseList = listyZadan.getOrNull(index ?: -1)
+            if (exerciseList != null) {
+                E3(index)
+            } else {
+                Text("Nie znaleziono listy zadań.")
+            }
+        }
     }
 }
 
@@ -198,7 +213,7 @@ public fun NavHost(
 ): Unit {}
 
 @Composable
-fun E1() {
+fun E1(navController: NavHostController) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -212,6 +227,7 @@ fun E1() {
                 Column (
                     modifier = Modifier.fillMaxWidth().padding(5.dp)
                         .background(color = Color.LightGray)
+                        .clickable { navController.navigate("${Screens.E3.route}/$it") }
                         .padding(30.dp),
                 ) {
                     var count = 0
@@ -282,15 +298,59 @@ fun E2() {
 }
 
 @Composable
-fun E3() {
+fun E3(it: Int) {
+    val arg = listyZadan[it]
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(10.dp).fillMaxWidth()
+    ) {
+        var count = 0
+        fun calc() {
+            for (n in 0..(listyZadan.size - 1)) {
+                if (listyZadan[n].subject == arg.subject) {
+                    count++
+                    if (listyZadan[n] == arg) {
+                        break
+                    }
+                }
+            }
+        }
 
+        calc()
+        Text("${arg.subject.name} - Lista $count", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp, textAlign = TextAlign.Center)
+        LazyColumn(
+            modifier = Modifier.padding(bottom = 100.dp)
+        ) {
+            items(arg.exercises.size) {
+                Column (
+                    modifier = Modifier.fillMaxWidth().padding(5.dp)
+                        .background(color = Color.LightGray)
+                        .padding(30.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Zadanie ${it+1}", fontSize = 20.sp)
+                        Text("Ilość punktów: ${arg.exercises[it].points}", fontSize = 20.sp)
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(arg.exercises[it].content)
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MyPreview() {
     JetpackListyTheme {
-        E1()
         Navigation()
     }
 }
