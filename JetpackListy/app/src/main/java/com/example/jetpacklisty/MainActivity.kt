@@ -226,7 +226,7 @@ fun E1(navController: NavHostController) {
             items(listyZadan.size) {
                 Column (
                     modifier = Modifier.fillMaxWidth().padding(5.dp)
-                        .background(color = Color.LightGray)
+                        .background(color = Color.hsl(220F, 0.7F, 0.7F))
                         .clickable { navController.navigate("${Screens.E3.route}/$it") }
                         .padding(30.dp),
                 ) {
@@ -266,7 +266,7 @@ fun E2() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(20.dp).fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text("Moje Oceny", modifier = Modifier.fillMaxWidth().padding(50.dp, 40.dp), fontSize = 30.sp, textAlign = TextAlign.Center)
         LazyColumn(
@@ -275,7 +275,7 @@ fun E2() {
             items(rosemary.size) {
                 Column (
                     modifier = Modifier.fillMaxWidth().padding(5.dp)
-                        .background(color = Color.LightGray)
+                        .background(color = Color.hsl(220F, 0.7F, 0.7F))
                         .padding(30.dp),
                 ) {
                     Row(
@@ -325,7 +325,7 @@ fun E3(it: Int) {
             items(arg.exercises.size) {
                 Column (
                     modifier = Modifier.fillMaxWidth().padding(5.dp)
-                        .background(color = Color.LightGray)
+                        .background(color = Color.hsl(220F, 0.7F, 0.7F))
                         .padding(30.dp),
                 ) {
                     Row(
