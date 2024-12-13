@@ -6,7 +6,7 @@ ___
 - [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/ListyZadan" target="_blank">Lista 3</a> 💮
 - [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/JetpackQuiz" target="_blank">Lista 4</a> 💮
 - [x] Lista 5 🥀
-- [ ] Lista 6
+- [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/JetpackListy" target="_blank">Lista 6</a> 💮
 - [ ] Lista 7
 - [ ] Lista 8
 ___
