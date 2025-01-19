@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -170,7 +169,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier) {
                 arguments = listOf(navArgument("index") { type = NavType.IntType })
         ) { backStackEntry ->
             val index = backStackEntry.arguments!!.getInt("index")
-            val exerciseList = listyZadan.getOrNull(index ?: -1)
+            val exerciseList = listyZadan.getOrNull(index)
             if (exerciseList != null) {
                 E3(index)
             } else {
@@ -206,13 +205,6 @@ fun getImageVector(iconResId: Int): ImageVector {
 }
 
 @Composable
-public fun NavHost(
-    navController: NavHostController,
-    startDestination: String,
-    builder: NavGraphBuilder.() -> Unit
-): Unit {}
-
-@Composable
 fun E1(navController: NavHostController) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -233,7 +225,7 @@ fun E1(navController: NavHostController) {
                     var count = 0
 
                     fun calc() {
-                        for (i in 0..(listyZadan.size-1)) {
+                        for (i in 0..<listyZadan.size) {
                             if (listyZadan[it].subject == listyZadan[i].subject) {
                                 count++
                                 if (i == it) {break}
@@ -246,7 +238,7 @@ fun E1(navController: NavHostController) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(listyZadan[it].subject.name, fontSize = 20.sp)
-                        Text("Lista: " + count, fontSize = 20.sp)
+                        Text("Lista: $count", fontSize = 20.sp)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -261,6 +253,7 @@ fun E1(navController: NavHostController) {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun E2() {
     Column(
@@ -307,7 +300,7 @@ fun E3(it: Int) {
     ) {
         var count = 0
         fun calc() {
-            for (n in 0..(listyZadan.size - 1)) {
+            for (n in 0..<listyZadan.size) {
                 if (listyZadan[n].subject == arg.subject) {
                     count++
                     if (listyZadan[n] == arg) {
