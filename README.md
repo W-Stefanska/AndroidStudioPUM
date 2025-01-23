@@ -8,5 +8,5 @@ ___
 - [x] Lista 5 🥀
 - [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/JetpackListy" target="_blank">Lista 6</a> 💮
 - [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/ListaStudentow" target="_blank">Lista 7</a> 💮
-- [ ] Lista 8
+- [x] <a href="https://github.com/W-Stefanska/AndroidStudioPUM/tree/main/EdytujOceny" target="_blank">Lista 8</a> 
 ___
