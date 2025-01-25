@@ -7,7 +7,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,11 +20,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,9 +49,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -79,6 +89,9 @@ interface GradeDao {
     @Query("SELECT * FROM grades WHERE name = :name")
     fun getGradeByName(name: String): List<Grade>
 
+    @Query("SELECT * FROM grades WHERE id = :id")
+    suspend fun getGradeById(id: Int): Grade
+
     @Query("DELETE FROM grades")
     suspend fun deleteAll()
 
@@ -111,6 +124,9 @@ class GradesRepository(private val gD: GradeDao) {
     fun getGrades() = gD.getGrades()
     suspend fun clear() = gD.deleteAll()
     suspend fun add(grade: Grade) = gD.insert(grade)
+    suspend fun update(grade: Grade) = gD.update(grade)
+    suspend fun getById(id: Int) = gD.getGradeById(id)
+    suspend fun delete(grade: Grade) = gD.delete(grade)
 }
 
 class GradeViewModelFactory(private val application: Application) :
@@ -126,6 +142,9 @@ class GradeViewModel(application: Application) : ViewModel() {
     private val _gradesState = MutableStateFlow<List<Grade>>(emptyList())
     val gradesState: StateFlow<List<Grade>>
         get() = _gradesState
+
+    private val _grade = MutableLiveData<Grade>()
+    val grade: LiveData<Grade> get() = _grade
 
     init {
         val db = GradeDatabase.getDatabase(application)
@@ -149,9 +168,28 @@ class GradeViewModel(application: Application) : ViewModel() {
         }
     }
 
+    fun delete(grade: Grade) {
+        viewModelScope.launch {
+            repository.delete(grade)
+        }
+    }
+
     fun addGrade(grade: Grade) {
         viewModelScope.launch {
             repository.add(grade)
+        }
+    }
+
+    fun getGradeById(id: Int) {
+        viewModelScope.launch {
+            val result = repository.getById(id)
+            _grade.postValue(result)
+        }
+    }
+
+    fun update(grade: Grade) {
+        viewModelScope.launch {
+            repository.update(grade)
         }
     }
 }
@@ -194,8 +232,19 @@ fun NavGraph(navController: NavHostController, modifier: Modifier) {
         modifier = modifier
     ) {
         composable(route = Screens.MojeOceny.route) { MojeOceny(navController, modifier) }
-        composable(route = Screens.Edytuj.route) { Edytuj(navController, modifier) }
+        composable(route = Screens.Edytuj.route) { Edytuj(navController, modifier, -1) }
         composable(route = Screens.DodajNowy.route) { DodajNowy(navController, modifier) }
+        composable(
+            route = "edytuj/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id")
+            Edytuj(navController, modifier, id ?: -1)
+        }
     }
 }
 
@@ -207,6 +256,8 @@ fun MojeOceny(navController: NavHostController, modifier: Modifier = Modifier) {
         GradeViewModelFactory(LocalContext.current.applicationContext as Application)
     )
     val grades by viewModel.gradesState.collectAsStateWithLifecycle()
+
+    val avg = grades.map { it.value }.average()
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -232,6 +283,9 @@ fun MojeOceny(navController: NavHostController, modifier: Modifier = Modifier) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate("edytuj/${grades[it].id}")
+                                }
                                 .padding(2.dp)
                         )
                     }
@@ -249,7 +303,11 @@ fun MojeOceny(navController: NavHostController, modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text("Średnia ocen: ", fontSize = 20.sp)
-                    Text("5.0", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    if (avg.isNaN()) {
+                        Text("Brak ocen", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    }
+                    else { Text(String.format("%.2f", avg), fontSize = 20.sp, fontWeight = FontWeight.Bold) }
+
                 }
                 Button(onClick = {navController.navigate(Screens.DodajNowy.route)}, modifier = Modifier.fillMaxWidth().height(60.dp) ) {
                     Text("Nowy wpis", fontSize = 20.sp)
@@ -260,12 +318,32 @@ fun MojeOceny(navController: NavHostController, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Edytuj(navController: NavHostController, modifier: Modifier = Modifier) {
+fun Edytuj(navController: NavHostController, modifier: Modifier = Modifier, id: Int) {
     val viewModel: GradeViewModel = viewModel(
         LocalViewModelStoreOwner.current!!,
         "GradeViewModel",
         GradeViewModelFactory(LocalContext.current.applicationContext as Application)
     )
+
+    LaunchedEffect(id) {
+        viewModel.getGradeById(id)
+    }
+
+    val grade = viewModel.grade.value
+
+    if (grade == null) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    var textInput by remember { mutableStateOf(grade?.name.toString()) }
+    var numberInput by remember { mutableStateOf(grade?.value.toString()) }
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -277,11 +355,34 @@ fun Edytuj(navController: NavHostController, modifier: Modifier = Modifier) {
         ) {
             Text("Edytuj ocenę", fontSize = 24.sp)
         }},
-        content = { innerPadding ->
+            content = { innerPadding ->
             Column (
-                modifier = Modifier.padding(innerPadding)
-            ) {
+                modifier = Modifier.fillMaxWidth().padding(innerPadding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
 
+                ) {
+                OutlinedTextField(
+                    value = textInput,
+                    onValueChange = { textInput = it },
+                    label = { Text("Nazwa przedmiotu") },
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = numberInput,
+                    onValueChange = { input ->
+                        val regex = """^([1-4](\.\d{0,1})?|5(\.0?)?)$""".toRegex()
+                        if (input.isEmpty() || regex.matches(input)) {
+                            numberInput = input
+                        }
+                    },
+                    label = { Text("Ocena") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number
+                    )
+                )
             }
         },
         bottomBar = {
@@ -290,7 +391,21 @@ fun Edytuj(navController: NavHostController, modifier: Modifier = Modifier) {
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 10.dp)
             ) {
-                Button(onClick = { navController.navigate(Screens.MojeOceny.route) }, modifier = Modifier.fillMaxWidth().height(60.dp) ) {
+                Button(onClick = {
+                    if (textInput.isEmpty() || numberInput.isEmpty()) {
+                        return@Button
+                    }
+                    else {
+                        val upd = Grade(grade.id, textInput, numberInput.toDouble())
+                        viewModel.update(upd)
+                        navController.navigate(Screens.MojeOceny.route)
+                    }
+                    }, modifier = Modifier.fillMaxWidth().height(70.dp).padding(bottom = 10.dp) ) {
+                    Text("Edytuj wpis", fontSize = 20.sp)
+                }
+                Button(onClick = {
+                    viewModel.delete(grade)
+                    navController.navigate(Screens.MojeOceny.route) }, modifier = Modifier.fillMaxWidth().height(60.dp) ) {
                     Text("Usuń wpis", fontSize = 20.sp)
                 }
             }
